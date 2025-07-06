@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import Sidebar from "@/components/sidebar";
 import TransactionForm from "@/components/transaction-form";
+import TransanctionTable from "@/components/transaction-table";
 
 
 const tabs = [
@@ -30,6 +31,9 @@ export default function Home() {
         <div className="col-span-2">
           {activeTab === tabs[0] &&
             <TransactionForm />}
+
+          {activeTab === tabs[1] &&
+            <TransanctionTable />}
         </div>
       </div >
     </>

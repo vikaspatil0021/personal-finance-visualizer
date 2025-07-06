@@ -11,7 +11,7 @@ export async function GET() {
     try {
         const transactions = await Transaction.find().sort({ createdAt: -1 });
 
-        return NextResponse.json({ transactions });
+        return NextResponse.json(transactions);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 400 });
