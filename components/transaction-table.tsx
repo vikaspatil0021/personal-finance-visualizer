@@ -11,6 +11,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 
 type Txns = {
@@ -42,29 +44,55 @@ export default function TransanctionTable() {
     }, []);
 
     return (
-        <>
-            <Table className="bg-white rounded-lg border p-5">
-                <TableHeader className="bg-[#f2f2f2]">
+        <div className="p- border rounded-lg mx-auto">
+            <Table className="bg-white rounded-lg overflow-hidden">
+                <TableHeader className="bg-[#fcfbfb]">
                     <TableRow>
-                        <TableHead >Amount</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Transaction</TableHead>
+                        <TableHead className="text-center font-bold">Date</TableHead>
+                        <TableHead className="text-center font-bold" >Amount</TableHead>
+                        <TableHead className="text-center font-bold">Transaction</TableHead>
+                        <TableHead className="text-center font-bold">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
-                        txns && txns.map(({ _id, amount, date, description }) => {
+                        txns.length === 0 && Array.from({ length: 5 }).map((_, idx: number) => {
                             return (
-                                    <TableRow key={_id}>
-                                        <TableCell>{amount}</TableCell>
-                                        <TableCell>{new Date(date).toLocaleDateString()}</TableCell>
-                                        <TableCell>{description}</TableCell>
+                                <>
+                                    <TableRow key={idx}>
+                                        <TableCell align="center"><Skeleton className="h-2 w-16" /></TableCell>
+                                        <TableCell align="center"><Skeleton className="h-2 w-16" /></TableCell>
+                                        <TableCell align="center"><Skeleton className="h-2 w-16" /></TableCell>
+                                        <TableCell align="center">
+                                            <div className="flex gap-2 justify-center">
+                                                <Skeleton className="h-8 w-16" />
+                                                <Skeleton className="h-8 w-16" />
+                                            </div>
+                                        </TableCell>
                                     </TableRow>
+                                </>
+                            )
+                        })
+                    }
+                    {
+                        txns.length !== 0 && txns.map(({ _id, amount, date, description }) => {
+                            return (
+                                <TableRow key={_id}>
+                                    <TableCell align="center">{new Date(date).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center">{amount}</TableCell>
+                                    <TableCell align="center">{description}</TableCell>
+                                    <TableCell align="center" >
+                                        <div className="flex gap-2 justify-center">
+                                            <Button size="sm">Edit</Button>
+                                            <Button size="sm" variant="outline">Delete</Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
                             )
                         })
                     }
                 </TableBody>
             </Table>
-        </>
+        </div>
     )
 }
