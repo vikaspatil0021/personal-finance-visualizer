@@ -1,0 +1,104 @@
+"use client"
+
+import axios from "axios";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
+
+
+type FormInputs = {
+    amount: number;
+    date: Date
+    description: string;
+}
+
+export default function TransactionForm() {
+    const [btn_loading, set_btn_loading] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<FormInputs>();
+
+
+
+
+    const onSubmit = async (data: FormInputs) => {
+        set_btn_loading(true);
+        try {
+            const response = await axios.post('/api/transaction', data);
+
+            console.log('Transaction saved:', response.data);
+            reset()
+            toast("Transaction has been created.");
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.error('Error submitting transaction:', error.response?.data?.error || error.message);
+            toast("Transaction creation failed.");
+        } finally {
+            set_btn_loading(false);
+        }
+    };
+
+    return (
+        <>
+            <form onSubmit={handleSubmit(onSubmit)} className="max-w-md w-full p-5 mx-auto space-y-6 bg-white border rounded-lg">
+                <div>
+                    <Label htmlFor="amount" className="block text-sm font-medium mb-1">Amount:</Label>
+                    <Input
+                        id="amount"
+                        type="number"
+                        placeholder="Enter Amount:"
+                        className="bg-[#f1f1f1]/50"
+                        {...register('amount', {
+                            required: 'Amount is required',
+                            validate: (value) => value > 0 || 'Amount must be greater than zero',
+                        })}
+                    />
+                    {errors.amount && (
+                        <p className="text-sm text-red-500 mt-1">{errors.amount.message}</p>
+                    )}
+                </div>
+
+                <div>
+                    <Label htmlFor="date" className="block text-sm font-medium mb-1">Date:</Label>
+                    <Input
+                        id="date"
+                        type="date"
+                        placeholder="Enter Date:"
+                        className="bg-[#f1f1f1]/50"
+                        {...register('date', { required: 'Date is required' })}
+                    />
+                    {errors.date && (
+                        <p className="text-sm text-red-500 mt-1">{errors.date.message}</p>
+                    )}
+                </div>
+
+                <div>
+                    <Label htmlFor="description" className="block text-sm font-medium mb-1">Description:</Label>
+                    <Input
+                        id="description"
+                        placeholder="Enter description:"
+                        className="bg-[#f1f1f1]/50"
+                        {...register('description', { required: 'description is required' })}
+                    />
+                    {errors.description && (
+                        <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>
+                    )}
+                </div>
+                <Button type="submit" className="w-full" disabled={btn_loading}>
+                    {btn_loading ? "Submitting" : "Submit"}
+                </Button>
+            </form>
+
+        </>
+    )
+}

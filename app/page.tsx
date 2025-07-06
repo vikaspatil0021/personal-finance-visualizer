@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <>
       <div className="grid grid-cols-3 gap-4 px-5 py-10 relative mx-auto max-w-6xl ">
-        <div className="col-span-1 bg-white rounded-lg">
+        <div className="col-span-1 h-fit bg-white rounded-lg">
           <Sidebar
             tabs={tabs}
             activeTab={activeTab}
