@@ -55,7 +55,7 @@ export default function MonthlyBarChart() {
 
     return (
 
-        <div className=" bg-white  p-5 rounded-lg border">
+        <div className=" bg-white  p-2 md:p-5 rounded-lg border">
             <div className="w-full text-center py-3">
                 Monthly expenses bar chart
             </div>

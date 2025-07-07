@@ -22,15 +22,15 @@ export default function Home() {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4 px-5 py-10 relative mx-auto max-w-6xl ">
-        <div className="col-span-1 h-fit bg-white rounded-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-5 py-10 relative mx-auto max-w-6xl ">
+        <div className="md:col-span-1 h-fit bg-white rounded-lg">
           <Sidebar
             tabs={tabs}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
         </div>
-        <div className="col-span-2">
+        <div className="md:col-span-2">
           {activeTab === tabs[0] &&
             <TransactionForm
               type="new"
