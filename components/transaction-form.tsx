@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Label } from "./ui/label";
@@ -13,11 +13,25 @@ import { toast } from "sonner";
 
 type FormInputs = {
     amount: number;
-    date: Date
+    date: string
     description: string;
 }
+type TxnWithId = FormInputs & {
+    _id: string;
+};
 
-export default function TransactionForm() {
+
+export default function TransactionForm({
+    type,
+    data,
+    fetchTransactions,
+    set_open
+}: {
+    type: "new" | "edit"
+    data?: TxnWithId,
+    fetchTransactions?: () => Promise<void>
+    set_open?: Dispatch<SetStateAction<boolean>>
+}) {
     const [btn_loading, set_btn_loading] = useState(false);
 
     const {
@@ -25,19 +39,33 @@ export default function TransactionForm() {
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<FormInputs>();
+    } = useForm<FormInputs>({
+        defaultValues: {
+            ...data,
+            date: data ? new Date(data.date).toISOString().split("T")[0] : "",
+        }
+    });
 
 
 
 
-    const onSubmit = async (data: FormInputs) => {
+    const onSubmit = async (formdata: FormInputs) => {
         set_btn_loading(true);
         try {
-            const response = await axios.post('/api/transaction', data);
+            let response;
+            if (type == 'new') {
+                response = await axios.post('/api/transaction', formdata); //new
+            } else {
+                response = await axios.put(`/api/transaction?id=${data?._id}`, formdata); //update
+                if (fetchTransactions && set_open) {
+                    fetchTransactions();
+                    set_open(false);
+                }
+            }
 
             if (response.status = 200) {
                 reset()
-                toast.success("Transaction has been created.");
+                toast.success(`Transaction has been ${type == 'new' ? "created" : "updated"}`);
             }
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -97,7 +125,8 @@ export default function TransactionForm() {
                     )}
                 </div>
                 <Button type="submit" className="w-full" disabled={btn_loading}>
-                    {btn_loading ? "Submitting" : "Submit"}
+                    {type === "new" && (btn_loading ? "Submitting" : "Submit")}
+                    {type === "edit" && (btn_loading ? "Updating" : "Update")}
                 </Button>
             </form>
 

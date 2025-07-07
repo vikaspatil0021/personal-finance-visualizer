@@ -30,7 +30,9 @@ export default function Home() {
         </div>
         <div className="col-span-2">
           {activeTab === tabs[0] &&
-            <TransactionForm />}
+            <TransactionForm
+              type="new"
+            />}
 
           {activeTab === tabs[1] &&
             <TransanctionTable />}

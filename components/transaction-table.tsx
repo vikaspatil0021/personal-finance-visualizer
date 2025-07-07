@@ -10,9 +10,17 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
+import TransactionForm from "./transaction-form";
 
 
 type Txns = {
@@ -22,6 +30,36 @@ type Txns = {
     description: string;
 }
 
+
+function EditAction({
+    fetchTransactions,
+    data
+}: {
+    fetchTransactions: () => Promise<void>,
+    data: Txns
+
+}) {
+    const [open, set_open] = useState(false);
+    return (
+        <Dialog open={open} onOpenChange={set_open}>
+            <DialogTrigger asChild>
+                <Button size="sm" > Edit</Button >
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit transaction</DialogTitle>
+                </DialogHeader>
+
+                <TransactionForm
+                    type="edit"
+                    data={data}
+                    set_open={set_open}
+                    fetchTransactions={fetchTransactions}
+                />
+            </DialogContent>
+        </Dialog>
+    )
+}
 
 function TransactionRowAction({
     _id, date, description, amount, fetchTransactions
@@ -68,7 +106,10 @@ function TransactionRowAction({
             <TableCell align="center">{description}</TableCell>
             <TableCell align="center" >
                 <div className="flex gap-2 justify-center">
-                    <Button size="sm">Edit</Button>
+                    <EditAction
+                        fetchTransactions={fetchTransactions}
+                        data={{ _id, date, description, amount }}
+                    />
                     <Button size="sm" variant="outline"
                         onClick={() => delete_transaction_handler(_id)}
                         disabled={delete_btn}
