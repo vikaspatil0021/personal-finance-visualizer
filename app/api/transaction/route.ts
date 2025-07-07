@@ -9,8 +9,8 @@ export async function GET() {
     await dbConnect();
 
     try {
-        const transactions = await Transaction.find().sort({ createdAt: -1 });
-
+        const transactions = await Transaction.find().sort({ date: -1 });
+        
         return NextResponse.json(transactions);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

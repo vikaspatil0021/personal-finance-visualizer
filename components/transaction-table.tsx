@@ -18,35 +18,91 @@ import { Skeleton } from "./ui/skeleton";
 type Txns = {
     _id: string;
     amount: number;
-    date: Date
+    date: string
     description: string;
+}
+
+
+function TransactionRowAction({
+    _id, date, description, amount, fetchTransactions
+}: {
+    _id: string,
+    date: string,
+    description: string,
+    amount: number,
+    fetchTransactions: () => Promise<void>
+}) {
+    const [delete_btn, set_delete_btn] = useState(false);
+
+    const delete_transaction_handler = async (_id: string) => {
+        set_delete_btn(true)
+        try {
+            await axios.delete(`/api/transaction?id=${_id}`);
+
+            fetchTransactions();
+            toast.success('Transaction has been deleted');
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast.error(error.message, {
+                description: "Please try again later.",
+            });
+        } finally {
+            set_delete_btn(false);
+        }
+    }
+
+
+    return (
+        <TableRow key={_id}>
+            <TableCell align="center">
+                {
+                    new Date(date).toLocaleDateString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                    })
+                }
+            </TableCell>
+            <TableCell align="center">{amount}</TableCell>
+            <TableCell align="center">{description}</TableCell>
+            <TableCell align="center" >
+                <div className="flex gap-2 justify-center">
+                    <Button size="sm">Edit</Button>
+                    <Button size="sm" variant="outline"
+                        onClick={() => delete_transaction_handler(_id)}
+                        disabled={delete_btn}
+                    >{delete_btn ? "Deleting" : "Delete"}</Button>
+                </div>
+            </TableCell>
+        </TableRow>
+    )
 }
 
 export default function TransanctionTable() {
     const [txns, set_txns] = useState<Txns[]>([]);
 
+    const fetchTransactions = async () => {
+        try {
+            const response = await axios.get('/api/transaction');
+            set_txns(response.data);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast.error(error.message, {
+                description: "Please try again later.",
+            });
+        }
+    };
+
     useEffect(() => {
-        const fetchTransactions = async () => {
-            try {
-                const response = await axios.get('/api/transaction');
-                set_txns(response.data);
-
-                console.log('Transaction saved:', response.data);
-
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (error: any) {
-                console.error('Error submitting transaction:', error.response?.data?.error || error.message);
-                toast('Something went wrong');
-            }
-        };
-
         fetchTransactions();
     }, []);
 
     return (
         <div className="p- border rounded-lg mx-auto">
             <Table className="bg-white rounded-lg overflow-hidden">
-                <TableHeader className="bg-[#fcfbfb]">
+                <TableHeader className="bg-[#999]/20">
                     <TableRow>
                         <TableHead className="text-center font-bold">Date</TableHead>
                         <TableHead className="text-center font-bold" >Amount</TableHead>
@@ -75,19 +131,17 @@ export default function TransanctionTable() {
                         })
                     }
                     {
-                        txns.length !== 0 && txns.map(({ _id, amount, date, description }) => {
+                        txns.length !== 0 && txns.map(({ _id, amount, date, description }: Txns) => {
                             return (
-                                <TableRow key={_id}>
-                                    <TableCell align="center">{new Date(date).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center">{amount}</TableCell>
-                                    <TableCell align="center">{description}</TableCell>
-                                    <TableCell align="center" >
-                                        <div className="flex gap-2 justify-center">
-                                            <Button size="sm">Edit</Button>
-                                            <Button size="sm" variant="outline">Delete</Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <TransactionRowAction
+                                    key={_id}
+                                    _id={_id}
+                                    amount={amount}
+                                    date={date}
+                                    description={description}
+                                    fetchTransactions={fetchTransactions}
+
+                                />
                             )
                         })
                     }

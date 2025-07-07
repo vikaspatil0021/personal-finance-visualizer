@@ -15,7 +15,7 @@ export default function Sidebar({
   setActiveTab: Dispatch<SetStateAction<string>>
 }) {
   return (
-    <div className="m-4 rounded-lg border">
+    <div className="m-4 rounded-lg overflow-hidden border">
       {
         tabs.map((each_tab: string, idx: number) => {
           return (

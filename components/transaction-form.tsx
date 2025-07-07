@@ -35,14 +35,16 @@ export default function TransactionForm() {
         try {
             const response = await axios.post('/api/transaction', data);
 
-            console.log('Transaction saved:', response.data);
-            reset()
-            toast("Transaction has been created.");
+            if (response.status = 200) {
+                reset()
+                toast.success("Transaction has been created.");
+            }
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            console.error('Error submitting transaction:', error.response?.data?.error || error.message);
-            toast("Transaction creation failed.");
+            toast.error(error.message, {
+                description: "Please try again later.",
+            });
         } finally {
             set_btn_loading(false);
         }
