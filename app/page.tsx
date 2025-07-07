@@ -6,6 +6,8 @@ import Sidebar from "@/components/sidebar";
 import TransactionForm from "@/components/transaction-form";
 import TransanctionTable from "@/components/transaction-table";
 
+import MonthlyBarChart from "@/components/monthly-bar-chart";
+
 
 const tabs = [
   "New transaction",
@@ -36,6 +38,11 @@ export default function Home() {
 
           {activeTab === tabs[1] &&
             <TransanctionTable />}
+
+          {
+            activeTab === tabs[2] &&
+            <MonthlyBarChart />
+          }
         </div>
       </div >
     </>
