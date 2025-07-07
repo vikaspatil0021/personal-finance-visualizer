@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Personal Finance Visualizer (Stage 1 - `main` branch)
 
-## Getting Started
+## 🚀 Features (Stage 1)
 
-First, run the development server:
+* ✅ Add, Edit, and Delete transactions (amount, date, description)
+* 📄 View all transactions in a list
+* 📊 Visualize monthly expenses via a bar chart
+* 🧾 Basic form validation for clean data entry
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone this repository**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+    https://github.com/vikaspatil0021/personal-finance-visualizer.git
+    cd personal-finance-visualizer
+   ```
 
-## Learn More
+2. **Install dependencies**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Set up environment variables**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Create a `.env` file in the root directory and add your MongoDB connection string:
 
-## Deploy on Vercel
+   ```
+   MONGODB_URI=your-mongodb-uri
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Run the development server**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) to see it in action.
+
+---
+
+![Screenshot from 2025-07-07 11-53-04](https://github.com/user-attachments/assets/f622fd48-5181-4c34-a55c-b83f75eb05c4)
+![Screenshot from 2025-07-07 11-53-13](https://github.com/user-attachments/assets/edacb817-c114-455c-b44c-dafa84421a4f)
+![Screenshot from 2025-07-07 11-53-21](https://github.com/user-attachments/assets/edef88c6-a805-4cc5-9d0f-b15c232f2f3e)
